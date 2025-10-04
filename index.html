@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do List App</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input, form button {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+form button:hover {
+  background: #0056b3;
+}
+
+.filter-container {
+  margin-bottom: 20px;
+}
+
+#todo-list {
+  list-style: none;
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.todo-item span {
+  display: block;
+}
+
+.delete-btn {
+  background: crimson;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: darkred;
+}
+
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>To-Do List</h1>
+
+    <form id="todo-form">
+      <input type="text" id="todo-input" placeholder="Enter task" />
+      <input type="date" id="date-input" />
+      <button type="submit">Add</button>
+    </form>
+
+    <div class="filter-container">
+      <input type="text" id="filter-input" placeholder="Filter tasks..." />
+    </div>
+
+    <ul id="todo-list"></ul>
+  </div>
+
+  <script>
+    const todoForm = document.getElementById("todo-form");
+const todoInput = document.getElementById("todo-input");
+const dateInput = document.getElementById("date-input");
+const todoList = document.getElementById("todo-list");
+const filterInput = document.getElementById("filter-input");
+
+todoForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const task = todoInput.value.trim();
+  const date = dateInput.value;
+
+  // VALIDASI
+  if (task === "") {
+    alert("Task cannot be empty!");
+    return;
+  }
+  if (date === "") {
+    alert("Please select a date!");
+    return;
+  }
+
+  addTodo(task, date);
+  todoInput.value = "";
+  dateInput.value = "";
+});
+
+function addTodo(task, date) {
+  const li = document.createElement("li");
+  li.className = "todo-item";
+
+  const span = document.createElement("span");
+  span.textContent = `${task} — ${date}`;
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.addEventListener("click", () => li.remove());
+
+  li.appendChild(span);
+  li.appendChild(deleteBtn);
+  todoList.appendChild(li);
+}
+
+filterInput.addEventListener("input", () => {
+  const keyword = filterInput.value.toLowerCase();
+  const items = document.querySelectorAll(".todo-item");
+
+  items.forEach((item) => {
+    const text = item.innerText.toLowerCase();
+    item.style.display = text.includes(keyword) ? "flex" : "none";
+  });
+});
+
+  </script>
+  
+</body>
+</html>
